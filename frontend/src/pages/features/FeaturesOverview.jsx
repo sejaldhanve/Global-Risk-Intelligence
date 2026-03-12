@@ -57,16 +57,22 @@ const featureList = [
 
 export default function FeaturesOverview() {
   return (
-    <div className="space-y-10">
-      <FeatureHeader
-        eyebrow="Feature showcase"
-        title="Global Intelligence Playbook"
-        subtitle="Dedicated walkthroughs for every capability judges will see during the hackathon demo."
-      />
+    <div className="space-y-10 animate-fade-in">
+      <div className="animate-slide-up">
+        <FeatureHeader
+          eyebrow="Feature showcase"
+          title="Global Intelligence Playbook"
+          subtitle="Dedicated walkthroughs for every capability judges will see during the hackathon demo."
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {featureList.map((feature) => (
-          <FeatureCard key={feature.to} {...feature} />
+        {featureList.map((feature, index) => (
+          <div key={feature.to} className="animate-slide-up" style={{ animationDelay: `${(index % 6) * 100 + 100}ms` }}>
+            <div className="h-full transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl rounded-xl">
+              <FeatureCard {...feature} />
+            </div>
+          </div>
         ))}
       </div>
     </div>

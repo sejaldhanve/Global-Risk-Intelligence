@@ -19,22 +19,26 @@ const insightCards = [
 
 export default function AIAssistantFeature() {
   return (
-    <div className="space-y-10">
-      <FeatureHeader
-        eyebrow="AI workbench"
-        title="AI Geopolitical Intelligence Assistant"
-        subtitle="Sit a virtual analyst next to every judge—ask about ripple effects, shipping routes, or commodity shocks and get a briefing-grade response."
-      />
+    <div className="space-y-10 animate-fade-in">
+      <div className="animate-slide-up">
+        <FeatureHeader
+          eyebrow="AI workbench"
+          title="AI Geopolitical Intelligence Assistant"
+          subtitle="Sit a virtual analyst next to every judge—ask about ripple effects, shipping routes, or commodity shocks and get a briefing-grade response."
+        />
+      </div>
 
       <section className="grid md:grid-cols-3 gap-4">
-        {insightCards.map((card) => (
-          <FeatureDescription key={card.title} title={card.title}>
-            <p>{card.body}</p>
-          </FeatureDescription>
+        {insightCards.map((card, i) => (
+          <div key={card.title} className="animate-slide-up" style={{ animationDelay: `${(i * 100) + 200}ms` }}>
+            <FeatureDescription title={card.title}>
+              <p>{card.body}</p>
+            </FeatureDescription>
+          </div>
         ))}
       </section>
 
-      <div className="card">
+      <div className="card animate-slide-up animation-delay-500">
         <AIAssistant />
       </div>
     </div>

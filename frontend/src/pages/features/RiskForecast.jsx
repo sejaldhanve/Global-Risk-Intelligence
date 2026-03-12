@@ -29,16 +29,18 @@ export default function RiskForecast() {
   )
 
   return (
-    <div className="space-y-10">
-      <FeatureHeader
-        eyebrow="Predictive module"
-        title="Geopolitical Risk Forecasting"
-        subtitle="See where the risk curve is bending before headlines catch up—our models fuse live telemetry, domain classifiers, and narrative checks."
-      />
+    <div className="space-y-10 animate-fade-in">
+      <div className="animate-slide-up">
+        <FeatureHeader
+          eyebrow="Predictive module"
+          title="Geopolitical Risk Forecasting"
+          subtitle="See where the risk curve is bending before headlines catch up—our models fuse live telemetry, domain classifiers, and narrative checks."
+        />
+      </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6 animate-slide-up animation-delay-200">
         <div className="card">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Live Risk Distribution</h2>
+          <h2 className="text-xl font-semibold text-gray-100 mb-4">Live Risk Distribution</h2>
           <RiskChart events={events} />
         </div>
         <div className="card p-0 overflow-hidden">
@@ -47,31 +49,35 @@ export default function RiskForecast() {
       </div>
 
       <section className="grid md:grid-cols-3 gap-4">
-        {modelInsights.map((insight) => (
-          <FeatureDescription key={insight.title} title={insight.title}>
-            <p>{insight.body}</p>
-          </FeatureDescription>
+        {modelInsights.map((insight, i) => (
+          <div key={insight.title} className="animate-slide-up" style={{ animationDelay: `${(i * 100) + 400}ms` }}>
+            <FeatureDescription title={insight.title}>
+              <p>{insight.body}</p>
+            </FeatureDescription>
+          </div>
         ))}
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-4 animate-slide-up animation-delay-600">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">High-risk events on watch</h2>
-            <p className="text-sm text-gray-500">Ranked by criticality and confidence</p>
+            <h2 className="text-2xl font-semibold text-gray-100">High-risk events on watch</h2>
+            <p className="text-sm text-gray-400">Ranked by criticality and confidence</p>
           </div>
         </div>
 
-        {loading && <div className="card text-center py-10 text-gray-500">Crunching live risk data…</div>}
+        {loading && <div className="card text-center py-10 text-gray-500 animate-pulse">Crunching live risk data…</div>}
         {error && <div className="card border border-red-200 text-red-700">{error}</div>}
 
         {!loading && !error && (
           <div className="grid md:grid-cols-2 gap-4">
             {highRiskEvents.length === 0 && (
-              <div className="card text-center py-8 text-gray-500">No critical alerts yet—check back soon.</div>
+              <div className="card text-center py-8 text-gray-500 col-span-2">No critical alerts yet—check back soon.</div>
             )}
             {highRiskEvents.map((event) => (
-              <EventCard key={event._id} event={event} />
+              <div key={event._id} className="transition-transform duration-300 hover:-translate-y-1">
+                <EventCard event={event} />
+              </div>
             ))}
           </div>
         )}

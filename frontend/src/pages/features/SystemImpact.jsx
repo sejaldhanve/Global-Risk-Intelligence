@@ -64,31 +64,35 @@ export default function SystemImpact() {
   const impactBuckets = useMemo(() => bucketEventsByImpact(events), [events])
 
   return (
-    <div className="space-y-10">
-      <FeatureHeader
-        eyebrow="Systemic analysis"
-        title="Systemic Impact Analysis"
-        subtitle="Explain how seemingly local flashpoints cascade into energy shortages, blocked trade lanes, commodity volatility, and logistics slowdowns."
-      />
+    <div className="space-y-10 animate-fade-in">
+      <div className="animate-slide-up">
+        <FeatureHeader
+          eyebrow="Systemic analysis"
+          title="Systemic Impact Analysis"
+          subtitle="Explain how seemingly local flashpoints cascade into energy shortages, blocked trade lanes, commodity volatility, and logistics slowdowns."
+        />
+      </div>
 
-      {loading && <div className="card text-center py-10 text-gray-500">Modeling cascading impacts…</div>}
+      {loading && <div className="card text-center py-10 text-gray-500 animate-pulse">Modeling cascading impacts…</div>}
       {error && <div className="card border border-red-200 text-red-700">{error}</div>}
 
       {!loading && !error && (
         <div className="space-y-8">
-          {impactSections.map((section) => (
-            <div key={section.key} className="grid lg:grid-cols-[320px,1fr] gap-6">
+          {impactSections.map((section, i) => (
+            <div key={section.key} className="grid lg:grid-cols-[320px,1fr] gap-6 animate-slide-up" style={{ animationDelay: `${(i * 100) + 200}ms` }}>
               <FeatureDescription title={section.title}>
                 <p>{section.body}</p>
-                <p className="text-xs text-gray-500">Tied events: {impactBuckets[section.key].length || 0}</p>
+                <p className="text-xs text-gray-400 mt-2">Tied events: <span className="text-[#fca311] font-bold">{impactBuckets[section.key].length || 0}</span></p>
               </FeatureDescription>
 
               <div className="grid md:grid-cols-2 gap-4">
                 {impactBuckets[section.key].length === 0 && (
-                  <div className="card text-sm text-gray-500">No tagged events yet—feed will populate as data streams arrive.</div>
+                  <div className="card text-sm text-gray-500 col-span-2 text-center h-[120px] flex items-center justify-center">No tagged events yet—feed will populate as data streams arrive.</div>
                 )}
                 {impactBuckets[section.key].slice(0, 4).map((event) => (
-                  <EventCard key={event._id} event={event} />
+                  <div key={event._id} className="transition-transform duration-300 hover:-translate-y-1">
+                    <EventCard event={event} />
+                  </div>
                 ))}
               </div>
             </div>

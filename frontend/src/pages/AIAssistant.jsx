@@ -48,40 +48,40 @@ export default function AIAssistant() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
-          <Bot className="h-8 w-8 text-primary-600" />
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
+      <div className="text-center animate-slide-up">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4 shadow-[0_0_15px_rgba(252,163,17,0.3)]">
+          <Bot className="h-8 w-8 text-[#fca311]" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-100 mb-2">
           AI Intelligence Assistant
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-400">
           Ask questions about geopolitical events, impacts, and forecasts
         </p>
       </div>
 
       {messages.length === 0 && (
-        <div className="card">
-          <h3 className="text-lg font-semibold mb-4">Example Questions</h3>
+        <div className="card animate-slide-up animation-delay-100">
+          <h3 className="text-lg font-semibold mb-4 text-gray-100">Example Questions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {exampleQuestions.map((example, idx) => (
               <button
                 key={idx}
                 onClick={() => handleExampleClick(example)}
-                className="text-left p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                className="text-left p-4 border border-white/10 rounded-lg hover:border-[#fca311]/50 hover:bg-white/5 transition-colors group"
               >
-                <p className="text-sm text-gray-700">{example}</p>
+                <p className="text-sm text-gray-300 group-hover:text-white transition-colors">{example}</p>
               </button>
             ))}
           </div>
         </div>
       )}
 
-      <div className="card min-h-[400px] max-h-[600px] overflow-y-auto">
+      <div className="card min-h-[400px] max-h-[600px] overflow-y-auto animate-slide-up animation-delay-200">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-64 text-gray-400">
-            <div className="text-center">
+          <div className="flex items-center justify-center h-64 text-gray-500">
+            <div className="text-center animate-pulse">
               <Bot className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>Start a conversation by asking a question</p>
             </div>
@@ -91,25 +91,25 @@ export default function AIAssistant() {
             {messages.map((message, idx) => (
               <div
                 key={idx}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
+                  className={`max-w-[80%] rounded-lg p-4 shadow-md ${
                     message.role === 'user'
-                      ? 'bg-primary-600 text-white'
+                      ? 'bg-gradient-to-r from-[#fca311] to-[#ffd166] text-black'
                       : message.role === 'error'
-                      ? 'bg-red-50 border border-red-200 text-red-800'
-                      : 'bg-gray-100 text-gray-900'
+                      ? 'bg-red-500/10 border border-red-500/20 text-red-400'
+                      : 'bg-white/10 text-gray-100 border border-white/5'
                   }`}
                 >
                   {message.role === 'assistant' ? (
-                    <div className="space-y-3">
-                      <p className="font-medium">{message.content.answer}</p>
+                    <div className="space-y-3 text-sm md:text-base">
+                      <p className="font-medium text-white">{message.content.answer}</p>
                       
                       {message.content.keyFindings && message.content.keyFindings.length > 0 && (
                         <div>
-                          <h4 className="font-semibold text-sm mb-2">Key Findings:</h4>
-                          <ul className="list-disc list-inside space-y-1 text-sm">
+                          <h4 className="font-semibold text-sm mb-2 text-[#ffd166]">Key Findings:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-300">
                             {message.content.keyFindings.map((finding, i) => (
                               <li key={i}>{finding}</li>
                             ))}
@@ -118,26 +118,26 @@ export default function AIAssistant() {
                       )}
 
                       {message.content.data && (
-                        <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                        <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
                           {message.content.data.risk && (
                             <div>
-                              <span className="text-xs text-gray-600">Risk Level</span>
-                              <p className="font-semibold">{message.content.data.risk}</p>
+                              <span className="text-xs text-gray-400">Risk Level</span>
+                              <p className="font-semibold text-white">{message.content.data.risk}</p>
                             </div>
                           )}
                           {message.content.data.confidence && (
                             <div>
-                              <span className="text-xs text-gray-600">Confidence</span>
-                              <p className="font-semibold">{message.content.data.confidence}%</p>
+                              <span className="text-xs text-gray-400">Confidence</span>
+                              <p className="font-semibold text-white">{message.content.data.confidence}%</p>
                             </div>
                           )}
                         </div>
                       )}
 
                       {message.content.recommendations && message.content.recommendations.length > 0 && (
-                        <div className="pt-3 border-t border-gray-200">
-                          <h4 className="font-semibold text-sm mb-2">Recommendations:</h4>
-                          <ul className="list-disc list-inside space-y-1 text-sm">
+                        <div className="pt-3 border-t border-white/10">
+                          <h4 className="font-semibold text-sm mb-2 text-[#ffd166]">Recommendations:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-300">
                             {message.content.recommendations.map((rec, i) => (
                               <li key={i}>{rec}</li>
                             ))}
@@ -151,18 +151,18 @@ export default function AIAssistant() {
                       <p className="text-sm">{message.content}</p>
                     </div>
                   ) : (
-                    <p>{message.content}</p>
+                    <p className="font-medium">{message.content}</p>
                   )}
                 </div>
               </div>
             ))}
 
             {loading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Loader className="h-5 w-5 animate-spin" />
-                    <span>Analyzing...</span>
+              <div className="flex justify-start animate-fade-in">
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4 shadow-md">
+                  <div className="flex items-center gap-2 text-gray-400">
+                    <Loader className="h-5 w-5 animate-spin text-[#fca311]" />
+                    <span>Analyzing intelligence...</span>
                   </div>
                 </div>
               </div>
@@ -171,8 +171,8 @@ export default function AIAssistant() {
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="card">
-        <div className="flex gap-3">
+      <form onSubmit={handleSubmit} className="card animate-slide-up animation-delay-300">
+        <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             value={question}
@@ -184,10 +184,10 @@ export default function AIAssistant() {
           <button
             type="submit"
             disabled={loading || !question.trim()}
-            className="btn btn-primary flex items-center gap-2"
+            className="btn btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="h-5 w-5" />
-            Send
+            <span>Send Target Check</span>
           </button>
         </div>
       </form>

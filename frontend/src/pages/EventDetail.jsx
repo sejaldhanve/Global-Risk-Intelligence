@@ -28,15 +28,15 @@ export default function EventDetail() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading event details...</div>
+      <div className="flex items-center justify-center h-64 animate-fade-in">
+        <div className="text-gray-500 animate-pulse">Loading event details...</div>
       </div>
     )
   }
 
   if (!event) {
     return (
-      <div className="card text-center py-12">
+      <div className="card text-center py-12 animate-fade-in">
         <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
         <p className="text-gray-500">Event not found</p>
         <Link to="/" className="btn btn-primary mt-4">
@@ -47,94 +47,94 @@ export default function EventDetail() {
   }
 
   const riskColors = {
-    critical: 'bg-red-100 text-red-800 border-red-300',
-    high: 'bg-orange-100 text-orange-800 border-orange-300',
-    medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    low: 'bg-green-100 text-green-800 border-green-300'
+    critical: 'bg-red-100/10 text-red-500 border-red-500/20',
+    high: 'bg-orange-100/10 text-orange-500 border-orange-500/20',
+    medium: 'bg-yellow-100/10 text-yellow-500 border-yellow-500/20',
+    low: 'bg-green-100/10 text-green-500 border-green-500/20'
   }
 
   return (
-    <div className="space-y-6">
-      <Link to="/" className="inline-flex items-center text-primary-600 hover:text-primary-700">
+    <div className="space-y-6 animate-fade-in">
+      <Link to="/" className="inline-flex items-center text-[#fca311] hover:text-[#ffd166] transition-colors">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Dashboard
       </Link>
 
-      <div className="card">
-        <div className="flex items-start justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-900 flex-1">{event.title}</h1>
+      <div className="card animate-slide-up">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+          <h1 className="text-3xl font-bold text-gray-100 flex-1">{event.title}</h1>
           <span className={`px-4 py-2 rounded-full text-sm font-medium border ${riskColors[event.summary?.riskLevel || 'medium']}`}>
             {(event.summary?.riskLevel || 'medium').toUpperCase()} RISK
           </span>
         </div>
 
-        <div className="flex items-center gap-6 text-gray-600 mb-6">
+        <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-6">
           <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5" />
+            <MapPin className="h-5 w-5 text-[#fca311]" />
             <span>{event.country}, {event.region}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
+            <Calendar className="h-5 w-5 text-[#fca311]" />
             <span>{new Date(event.createdAt).toLocaleDateString()}</span>
           </div>
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
+            <AlertTriangle className="h-5 w-5 text-[#fca311]" />
             <span>{event.eventType?.replace('_', ' ').toUpperCase()}</span>
           </div>
         </div>
 
-        <p className="text-gray-700 text-lg leading-relaxed">{event.description}</p>
+        <p className="text-gray-300 text-lg leading-relaxed">{event.description}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card">
-          <h2 className="text-xl font-semibold mb-4">AI Consensus Summary</h2>
-          <p className="text-gray-700 mb-4">{event.summary?.text}</p>
+        <div className="card animate-slide-up animation-delay-100">
+          <h2 className="text-xl font-semibold mb-4 text-gray-100">AI Consensus Summary</h2>
+          <p className="text-gray-300 mb-4">{event.summary?.text}</p>
           
           <div className="space-y-3">
             <div>
-              <div className="flex justify-between text-sm text-gray-600 mb-1">
+              <div className="flex justify-between text-sm text-gray-400 mb-1">
                 <span>Confidence Level</span>
-                <span>{event.summary?.confidence}%</span>
+                <span className="text-[#fca311] font-bold">{event.summary?.confidence}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-white/5 rounded-full h-2">
                 <div
-                  className="bg-primary-600 h-2 rounded-full"
+                  className="bg-gradient-to-r from-[#fca311] to-[#ffd166] h-2 rounded-full"
                   style={{ width: `${event.summary?.confidence}%` }}
                 />
               </div>
             </div>
 
             {event.narrativeAnalysis && (
-              <div className="pt-3 border-t">
+              <div className="pt-4 border-t border-white/10 mt-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Narrative Verification</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    event.narrativeAnalysis.isReal === 'real' ? 'bg-green-100 text-green-800' :
-                    event.narrativeAnalysis.isReal === 'fake' ? 'bg-red-100 text-red-800' :
-                    'bg-yellow-100 text-yellow-800'
+                  <span className="text-sm font-medium text-gray-400">Narrative Verification</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                    event.narrativeAnalysis.isReal === 'real' ? 'bg-green-100/10 text-green-500 border-green-500/20' :
+                    event.narrativeAnalysis.isReal === 'fake' ? 'bg-red-100/10 text-red-500 border-red-500/20' :
+                    'bg-yellow-100/10 text-yellow-500 border-yellow-500/20'
                   }`}>
                     {event.narrativeAnalysis.isReal?.toUpperCase()}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  Sentiment: {event.narrativeAnalysis.sentiment}
+                <p className="text-sm text-gray-300 mt-2">
+                  <span className="text-gray-500">Sentiment:</span> {event.narrativeAnalysis.sentiment}
                 </p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Impact Analysis</h2>
+        <div className="card animate-slide-up animation-delay-200">
+          <h2 className="text-xl font-semibold mb-4 text-gray-100">Impact Analysis</h2>
           
           {event.impact && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Affected Sectors</h3>
+                <h3 className="text-sm font-medium text-gray-400 mb-2">Affected Sectors</h3>
                 <div className="flex flex-wrap gap-2">
                   {event.impact.sectors?.map((sector, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm">
+                    <span key={idx} className="px-3 py-1 bg-white/5 text-gray-300 border border-white/10 rounded-full text-sm">
                       {sector}
                     </span>
                   ))}
@@ -142,10 +142,10 @@ export default function EventDetail() {
               </div>
 
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Commodities at Risk</h3>
+                <h3 className="text-sm font-medium text-gray-400 mb-2">Commodities at Risk</h3>
                 <div className="flex flex-wrap gap-2">
                   {event.impact.commodities?.map((commodity, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
+                    <span key={idx} className="px-3 py-1 bg-[#fca311]/10 text-[#ffd166] border border-[#fca311]/20 rounded-full text-sm">
                       {commodity}
                     </span>
                   ))}
@@ -153,20 +153,20 @@ export default function EventDetail() {
               </div>
 
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Affected Countries</h3>
+                <h3 className="text-sm font-medium text-gray-400 mb-2">Affected Countries</h3>
                 <div className="flex flex-wrap gap-2">
                   {event.impact.affectedCountries?.map((country, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
+                    <span key={idx} className="px-3 py-1 bg-white/5 text-gray-300 border border-white/10 rounded-full text-sm">
                       {country}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-3 border-t">
+              <div className="pt-4 border-t border-white/10">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">Severity</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${riskColors[event.impact.severity || 'medium']}`}>
+                  <span className="text-sm font-medium text-gray-400">Severity</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium border ${riskColors[event.impact.severity || 'medium']}`}>
                     {(event.impact.severity || 'medium').toUpperCase()}
                   </span>
                 </div>
@@ -177,33 +177,33 @@ export default function EventDetail() {
       </div>
 
       {forecasts.length > 0 && (
-        <div className="card">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <TrendingUp className="h-6 w-6" />
+        <div className="card animate-slide-up animation-delay-300">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-100">
+            <TrendingUp className="h-6 w-6 text-[#fca311]" />
             Price Forecasts
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {forecasts.map((forecast, idx) => (
-              <div key={idx} className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2 capitalize">
+              <div key={idx} className="border border-white/10 bg-white/5 rounded-lg p-4 hover:border-white/20 transition-colors">
+                <h3 className="font-semibold text-gray-200 mb-2 capitalize">
                   {forecast.commodity}
                 </h3>
-                <div className="text-3xl font-bold text-primary-600 mb-2">
+                <div className="text-3xl font-bold text-[#ffd166] mb-2">
                   {forecast.prediction}
                 </div>
-                <div className="text-sm text-gray-600 space-y-1">
+                <div className="text-sm text-gray-400 space-y-1">
                   <div className="flex justify-between">
                     <span>Confidence:</span>
-                    <span className="font-medium">{forecast.confidence}%</span>
+                    <span className="font-medium text-gray-200">{forecast.confidence}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Timeframe:</span>
-                    <span className="font-medium">{forecast.timeframe}</span>
+                    <span className="font-medium text-gray-200">{forecast.timeframe}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Trend:</span>
                     <span className={`font-medium ${
-                      forecast.data?.trend === 'increase' ? 'text-red-600' : 'text-green-600'
+                      forecast.data?.trend === 'increase' ? 'text-red-500' : 'text-green-500'
                     }`}>
                       {forecast.data?.trend}
                     </span>
@@ -215,30 +215,32 @@ export default function EventDetail() {
         </div>
       )}
 
-      <div className="card">
-        <h2 className="text-xl font-semibold mb-4">Location</h2>
-        <ConflictMap events={[event]} />
+      <div className="card animate-slide-up animation-delay-400">
+        <h2 className="text-xl font-semibold mb-4 text-gray-100">Location</h2>
+        <div className="rounded-lg overflow-hidden border border-white/10">
+          <ConflictMap events={[event]} />
+        </div>
       </div>
 
       {event.sources && event.sources.length > 0 && (
-        <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Sources ({event.sources.length})</h2>
+        <div className="card animate-slide-up animation-delay-500">
+          <h2 className="text-xl font-semibold mb-4 text-gray-100">Sources ({event.sources.length})</h2>
           <div className="space-y-3">
             {event.sources.slice(0, 10).map((source, idx) => (
-              <div key={idx} className="border-l-4 border-primary-500 pl-4 py-2">
+              <div key={idx} className="border-l-4 border-[#fca311] pl-4 py-2 bg-white/5 rounded-r-lg">
                 <a
                   href={source.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-600 hover:text-primary-700 font-medium flex items-center gap-2"
+                  className="text-[#fca311] hover:text-[#ffd166] font-medium flex items-center gap-2 transition-colors"
                 >
                   {source.title}
                   <ExternalLink className="h-4 w-4" />
                 </a>
-                <p className="text-sm text-gray-600 mt-1">{source.snippet}</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                  <span>Credibility: {source.credibility}%</span>
-                  <span>Rank: #{source.rank}</span>
+                <p className="text-sm text-gray-400 mt-2">{source.snippet}</p>
+                <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
+                  <span className="bg-white/5 px-2 py-1 rounded">Credibility: <span className="text-gray-300">{source.credibility}%</span></span>
+                  <span className="bg-white/5 px-2 py-1 rounded">Rank: <span className="text-gray-300">#{source.rank}</span></span>
                 </div>
               </div>
             ))}

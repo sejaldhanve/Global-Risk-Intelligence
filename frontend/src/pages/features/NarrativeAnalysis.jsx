@@ -27,56 +27,66 @@ export default function NarrativeAnalysis() {
   const needsReview = events.filter((event) => event.narrativeAnalysis?.isReal === 'uncertain')
 
   return (
-    <div className="space-y-10">
-      <FeatureHeader
-        eyebrow="Narrative engine"
-        title="Narrative vs Reality Detection"
-        subtitle="Stop misinformation loops by comparing what the world is saying with what actually shows up in telemetry, trade data, and field reports."
-      />
+    <div className="space-y-10 animate-fade-in">
+      <div className="animate-slide-up">
+        <FeatureHeader
+          eyebrow="Narrative engine"
+          title="Narrative vs Reality Detection"
+          subtitle="Stop misinformation loops by comparing what the world is saying with what actually shows up in telemetry, trade data, and field reports."
+        />
+      </div>
 
-      <div className="card">
-        {loading && <div className="text-center py-10 text-gray-500">Checking narrative alignment…</div>}
+      <div className="card animate-slide-up animation-delay-200">
+        {loading && <div className="text-center py-10 text-gray-500 animate-pulse">Checking narrative alignment…</div>}
         {error && <div className="border border-red-200 text-red-700 p-4 rounded-lg">{error}</div>}
         {!loading && !error && <NarrativeRealityPanel events={events} />}
       </div>
 
       <section className="grid md:grid-cols-3 gap-4">
-        {insightBlocks.map((insight) => (
-          <FeatureDescription key={insight.title} title={insight.title}>
-            <p>{insight.body}</p>
-          </FeatureDescription>
+        {insightBlocks.map((insight, i) => (
+          <div key={insight.title} className="animate-slide-up" style={{ animationDelay: `${(i * 100) + 300}ms` }}>
+            <FeatureDescription title={insight.title}>
+              <p>{insight.body}</p>
+            </FeatureDescription>
+          </div>
         ))}
       </section>
 
-      <section className="grid lg:grid-cols-3 gap-6">
+      <section className="grid lg:grid-cols-3 gap-6 animate-slide-up animation-delay-500">
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-gray-900">Aligned narratives</h3>
-          <p className="text-sm text-gray-500">What the public says matches our system telemetry.</p>
+          <h3 className="text-lg font-semibold text-gray-100">Aligned narratives</h3>
+          <p className="text-sm text-gray-400">What the public says matches our system telemetry.</p>
           <div className="space-y-3">
             {aligned.slice(0, 3).map((event) => (
-              <EventCard key={event._id} event={event} />
+              <div key={event._id} className="transition-transform duration-300 hover:-translate-y-1">
+                <EventCard event={event} />
+              </div>
             ))}
             {aligned.length === 0 && <div className="card text-sm text-gray-500">No aligned narratives yet.</div>}
           </div>
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-gray-900">Disputed narratives</h3>
-          <p className="text-sm text-gray-500">Claims flagged as false or exaggerated.</p>
+          <h3 className="text-lg font-semibold text-gray-100">Disputed narratives</h3>
+          <p className="text-sm text-gray-400">Claims flagged as false or exaggerated.</p>
           <div className="space-y-3">
             {disputed.slice(0, 3).map((event) => (
-              <EventCard key={event._id} event={event} />
+              <div key={event._id} className="transition-transform duration-300 hover:-translate-y-1">
+                <EventCard event={event} />
+              </div>
             ))}
             {disputed.length === 0 && <div className="card text-sm text-gray-500">No disputed narratives right now.</div>}
           </div>
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-gray-900">Signals needing validation</h3>
-          <p className="text-sm text-gray-500">Auto-routed to analysts for rapid confirmation.</p>
+          <h3 className="text-lg font-semibold text-gray-100">Signals needing validation</h3>
+          <p className="text-sm text-gray-400">Auto-routed to analysts for rapid confirmation.</p>
           <div className="space-y-3">
             {needsReview.slice(0, 3).map((event) => (
-              <EventCard key={event._id} event={event} />
+              <div key={event._id} className="transition-transform duration-300 hover:-translate-y-1">
+                <EventCard event={event} />
+              </div>
             ))}
             {needsReview.length === 0 && <div className="card text-sm text-gray-500">All signals validated.</div>}
           </div>
