@@ -17,7 +17,7 @@ from connectors import (
 )
 from debugging import log_ingestion_results
 from normalization import normalize_events
-from persistence import write_jsonl, write_parquet, upsert_postgres
+from persistence import write_jsonl, write_parquet, upsert_events, init_db
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def run_pipeline(name: str, fetch_fn: Callable, normalize_source: str, *fetch_ar
         write_parquet(cleaned, OUTPUT_DIR / f"{name}.parquet")
         log_ingestion_results(normalize_source, len(raw), len(cleaned), len(raw) - len(cleaned))
         try:
-            upsert_postgres(cleaned)
+            upsert_events(cleaned)
         except Exception as exc:
             logger.warning("PostgreSQL upsert skipped/failed", exc_info=exc)
         return cleaned
@@ -44,6 +44,7 @@ def run_pipeline(name: str, fetch_fn: Callable, normalize_source: str, *fetch_ar
 
 
 async def main_loop(interval_hours: int = 6):
+    init_db()
     while True:
         logger.info("Starting scheduled ingestion cycle")
         await asyncio.gather(

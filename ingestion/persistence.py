@@ -6,8 +6,9 @@ from typing import Iterable, List
 
 import pandas as pd
 from sqlalchemy import text
-from sqlalchemy.engine import Engine
-from sqlalchemy import create_engine
+
+from db import get_session, engine
+from models import Base, Event
 
 logger = logging.getLogger(__name__)
 
@@ -27,37 +28,36 @@ def write_parquet(events: Iterable[dict], path: Path) -> Path:
     return path
 
 
-def _engine() -> Engine:
-    db_url = os.getenv("DATABASE_URL")
-    if not db_url:
-        raise ValueError("DATABASE_URL env var must be set to persist into PostgreSQL")
-    return create_engine(db_url)
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
 
-def upsert_postgres(events: List[dict], table: str = "events") -> int:
+def upsert_events(events: List[dict]) -> int:
+    """Upsert events into Postgres using SQLAlchemy Core."""
     if not events:
         return 0
-    engine = _engine()
-    with engine.begin() as conn:
+    with get_session() as session:
         for ev in events:
-            # Basic upsert using INSERT ... ON CONFLICT (requires unique constraint on id)
-            stmt = text(
-                f"""
-                INSERT INTO {table} (id, title, source, source_reliability, location, latitude, longitude,
-                                     event_type, severity, date, trust_score, raw)
-                VALUES (:id, :title, :source, :source_reliability, :location, :latitude, :longitude,
-                        :event_type, :severity, :date, :trust_score, CAST(:raw AS JSONB))
-                ON CONFLICT (id) DO UPDATE SET
-                    title = EXCLUDED.title,
-                    location = EXCLUDED.location,
-                    latitude = EXCLUDED.latitude,
-                    longitude = EXCLUDED.longitude,
-                    event_type = EXCLUDED.event_type,
-                    severity = EXCLUDED.severity,
-                    date = EXCLUDED.date,
-                    trust_score = EXCLUDED.trust_score,
-                    raw = EXCLUDED.raw;
-                """
+            session.execute(
+                text(
+                    """
+                    INSERT INTO events (id,title,source,source_reliability,location,latitude,longitude,event_type,
+                                        severity,date,trust_score,raw,created_at,updated_at)
+                    VALUES (:id,:title,:source,:source_reliability,:location,:latitude,:longitude,:event_type,
+                            :severity,:date,:trust_score,CAST(:raw AS JSONB), NOW(), NOW())
+                    ON CONFLICT (id) DO UPDATE SET
+                        title = EXCLUDED.title,
+                        location = EXCLUDED.location,
+                        latitude = EXCLUDED.latitude,
+                        longitude = EXCLUDED.longitude,
+                        event_type = EXCLUDED.event_type,
+                        severity = EXCLUDED.severity,
+                        date = EXCLUDED.date,
+                        trust_score = EXCLUDED.trust_score,
+                        raw = EXCLUDED.raw,
+                        updated_at = NOW();
+                    """
+                ),
+                {**ev, "raw": json.dumps(ev.get("raw", {}), default=str)},
             )
-            conn.execute(stmt, {**ev, "raw": json.dumps(ev.get("raw", {}), default=str)})
     return len(events)
