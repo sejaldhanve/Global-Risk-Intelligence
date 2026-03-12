@@ -5,7 +5,7 @@ export default function Layout({ children }) {
   const location = useLocation()
 
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: false },
     { path: '/features', label: 'Features', icon: Compass },
     { path: '/assistant', label: 'AI Assistant', icon: Bot, exact: true }
   ]
@@ -16,18 +16,16 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+    <div className="min-h-screen bg-[#050510] text-gray-100">
+      <nav className="bg-[#050510]/80 backdrop-blur-md shadow-sm border-b border-white/10 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Globe className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Global Intel Platform
-              </span>
-            </div>
+            <Link to="/dashboard" className="flex items-center relative group">
+              <div className="absolute inset-0 bg-white/60 blur-2xl rounded-full scale-[1.5] z-0 pointer-events-none transition-all duration-300 group-hover:bg-white/80 group-hover:scale-[1.8]"></div>
+              <img src="/images/logo.png" alt="Global Risk Intelligence" className="h-10 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)] relative z-10" />
+            </Link>
             
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 items-center">
               {navItems.map(({ path, label, icon: Icon, exact }) => {
                 const isActive = exact ? location.pathname === path : location.pathname.startsWith(path)
                 return (
@@ -35,7 +33,7 @@ export default function Layout({ children }) {
                     key={path}
                     to={path}
                     className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                      isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:bg-gray-100'
+                      isActive ? 'bg-white/10 text-[#fca311]' : 'text-gray-400 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     <Icon className="h-5 w-5 mr-2" />

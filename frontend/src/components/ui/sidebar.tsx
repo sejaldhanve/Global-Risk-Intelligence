@@ -25,7 +25,7 @@ export default function DashboardSidebar() {
           <div className="relative flex items-center justify-center h-12 shrink-0">
             {/* White glow effect so dark logos are clearly visible */}
             <div className="absolute inset-0 bg-white/70 blur-xl rounded-full scale-[1.8] z-0 pointer-events-none"></div>
-            <img src="/logo.png" alt="GRI Logo" className="h-12 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)] relative z-10 pb-1" />
+            <img src="/images/logo.png" alt="GRI Logo" className="h-12 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)] relative z-10 pb-1" />
           </div>
           <div className="flex flex-col z-10">
             <h2 className="font-bold text-[15px] leading-tight text-white drop-shadow-sm truncate">Global Risk<br/>Intelligence</h2>

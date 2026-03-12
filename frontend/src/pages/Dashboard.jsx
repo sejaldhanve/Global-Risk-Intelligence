@@ -59,16 +59,16 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Global Conflict Intelligence Dashboard
+          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">
+            Global Conflict <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fca311] to-[#ffd166]">Intelligence Dashboard</span>
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-sm text-gray-400 font-light mt-1">
             Real-time geopolitical event monitoring and impact analysis
           </p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="btn btn-primary flex items-center gap-2"
+          className="px-5 py-2 bg-gradient-to-r from-[#fca311] to-[#ffd166] hover:brightness-110 text-black rounded-lg text-sm font-bold transition-all shadow-[0_0_15px_rgba(252,163,17,0.4)] hover:shadow-[0_0_25px_rgba(252,163,17,0.6)] flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
           Analyze Event
@@ -96,19 +96,19 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="card">
-        <h2 className="text-xl font-semibold mb-4">Conflict Map</h2>
+      <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
+        <h2 className="text-xl font-semibold mb-4 text-white">Conflict Map</h2>
         <ConflictMap events={events} onEventClick={handleEventClick} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">Recent Events</h2>
+            <h2 className="text-xl font-semibold text-white">Recent Events</h2>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              className="px-3 py-2 bg-[#050510] border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-[#fca311]/50 shadow-md"
             >
               <option value="all">All Risk Levels</option>
               <option value="critical">Critical</option>
@@ -119,16 +119,16 @@ export default function Dashboard() {
           </div>
 
           {loading ? (
-            <div className="card text-center py-12">
-              <div className="text-gray-500">Loading events...</div>
+            <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-xl text-center py-12">
+              <div className="text-gray-400">Loading events...</div>
             </div>
           ) : events.length === 0 ? (
-            <div className="card text-center py-12">
-              <Globe className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500">No events found</p>
+            <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-xl text-center py-12">
+              <Globe className="h-12 w-12 text-gray-500 mx-auto mb-3" />
+              <p className="text-gray-400">No events found</p>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="btn btn-primary mt-4"
+                className="px-5 py-2 mt-4 bg-gradient-to-r from-[#fca311] to-[#ffd166] hover:brightness-110 text-black rounded-lg text-sm font-bold transition-all shadow-[0_0_15px_rgba(252,163,17,0.4)]"
               >
                 Analyze First Event
               </button>
@@ -147,10 +147,20 @@ export default function Dashboard() {
             selectedDomain={domainFilter}
             onDomainChange={setDomainFilter}
           />
-          <RiskChart events={events} />
-          <NarrativeRealityPanel events={events} />
-          <PublicDiscoursePanel domain={domainFilter} />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <RiskChart events={events} />
+        <div className="lg:col-span-2 flex">
+          <div className="w-full">
+            <NarrativeRealityPanel events={events} />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        <PublicDiscoursePanel domain={domainFilter} />
       </div>
 
       <CreateEventModal

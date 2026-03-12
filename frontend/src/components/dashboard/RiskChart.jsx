@@ -15,16 +15,19 @@ export default function RiskChart({ events = [] }) {
   ]
 
   return (
-    <div className="card">
-      <h3 className="text-lg font-semibold mb-4">Risk Distribution</h3>
+    <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
+      <h3 className="text-xl font-semibold mb-4 text-white">Risk Distribution</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="count" fill="#3b82f6" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" vertical={false} />
+          <XAxis dataKey="name" stroke="#9ca3af" tick={{fill: '#9ca3af'}} />
+          <YAxis stroke="#9ca3af" tick={{fill: '#9ca3af'}} />
+          <Tooltip 
+            contentStyle={{ backgroundColor: '#050510', borderColor: '#ffffff1a', color: '#fff', borderRadius: '8px' }}
+            itemStyle={{ color: '#fff' }}
+          />
+          <Legend wrapperStyle={{ paddingTop: '20px' }} />
+          <Bar dataKey="count" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

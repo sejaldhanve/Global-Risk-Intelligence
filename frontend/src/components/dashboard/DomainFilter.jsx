@@ -12,10 +12,10 @@ const DOMAINS = [
 
 export default function DomainFilter({ selectedDomain, onDomainChange, embedded = false, className = '' }) {
   return (
-    <div className={`${embedded ? '' : 'card'} ${className}`}>
+    <div className={`${embedded ? '' : 'bg-white/5 border border-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl'} ${className}`}>
       <div className="flex items-center gap-2 mb-4">
-        <Filter className="h-5 w-5 text-gray-600" />
-        <h3 className="font-semibold text-gray-900">Filter by Domain</h3>
+        <Filter className="h-5 w-5 text-[#fca311]" />
+        <h3 className="font-semibold text-white">Filter by Domain</h3>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
@@ -23,14 +23,14 @@ export default function DomainFilter({ selectedDomain, onDomainChange, embedded 
           <button
             key={domain.value}
             onClick={() => onDomainChange(domain.value)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all text-left ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all text-left ${
               selectedDomain === domain.value
-                ? 'border-primary-500 bg-primary-50 text-primary-900'
-                : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                ? 'border-[#fca311] bg-[#fca311]/10 text-[#fca311] shadow-[0_0_15px_rgba(252,163,17,0.15)]'
+                : 'border-white/10 bg-black/20 hover:border-white/20 hover:bg-white/5 text-gray-400'
             }`}
           >
             <span className="text-2xl">{domain.icon}</span>
-            <span className="font-medium text-sm">{domain.label}</span>
+            <span className="font-medium text-sm tracking-wide">{domain.label}</span>
           </button>
         ))}
       </div>

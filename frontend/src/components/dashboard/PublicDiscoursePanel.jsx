@@ -12,10 +12,10 @@ const DOMAIN_QUERIES = {
 }
 
 const sentimentColors = {
-  optimistic: 'text-emerald-600 bg-emerald-50',
-  concerned: 'text-amber-600 bg-amber-50',
-  negative: 'text-rose-600 bg-rose-50',
-  mixed: 'text-slate-600 bg-slate-100'
+  optimistic: 'text-emerald-400 bg-emerald-500/20 border border-emerald-500/30',
+  concerned: 'text-amber-400 bg-amber-500/20 border border-amber-500/30',
+  negative: 'text-red-400 bg-red-500/20 border border-red-500/30',
+  mixed: 'text-slate-300 bg-white/10 border border-white/20'
 }
 
 export default function PublicDiscoursePanel({ domain }) {
@@ -74,44 +74,44 @@ export default function PublicDiscoursePanel({ domain }) {
   }, [discourse])
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between">
+    <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Public Discourse Signals</h3>
-          <p className="text-sm text-gray-500">Live sentiment from open platforms</p>
+          <h3 className="text-xl font-semibold text-white">Public Discourse Signals</h3>
+          <p className="text-sm text-gray-400">Live sentiment from open platforms</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#fca311]">
           <MessageCircle className="h-4 w-4" />
           {domain === 'all' ? 'Global view' : domain.replace('_', ' ')}
         </div>
       </div>
 
       {loading ? (
-        <div className="h-32 flex items-center justify-center text-sm text-gray-500">Loading discourse...</div>
+        <div className="h-32 flex items-center justify-center text-sm font-medium text-gray-400">Loading discourse...</div>
       ) : error ? (
-        <div className="rounded-lg border border-rose-100 bg-rose-50 p-4 text-sm text-rose-700">{error}</div>
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-medium text-red-400">{error}</div>
       ) : !discourse ? (
-        <div className="h-32 flex items-center justify-center text-sm text-gray-500">Awaiting discourse data</div>
+        <div className="h-32 flex items-center justify-center text-sm font-medium text-gray-400">Awaiting discourse data</div>
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-            <div className="border border-gray-100 rounded-xl p-4">
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Dominant Sentiment</p>
-              <p className="text-2xl font-semibold text-gray-900 capitalize">
+            <div className="bg-black/20 border border-white/10 rounded-xl p-5">
+              <p className="text-xs uppercase tracking-wider font-semibold text-gray-500 mb-1">Dominant Sentiment</p>
+              <p className="text-2xl font-bold text-white capitalize">
                 {discourse.aggregatedSentiment?.dominant || 'mixed'}
               </p>
             </div>
-            <div className="border border-gray-100 rounded-xl p-4">
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Audience Engagement</p>
-              <p className="text-2xl font-semibold text-gray-900">
+            <div className="bg-black/20 border border-white/10 rounded-xl p-5">
+              <p className="text-xs uppercase tracking-wider font-semibold text-gray-500 mb-1">Audience Engagement</p>
+              <p className="text-2xl font-bold text-[#fca311]">
                 {discourse.totalEngagement?.toLocaleString?.() || 0}
               </p>
             </div>
           </div>
 
-          <div className="mt-6">
-            <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-800">
-              <Activity className="h-4 w-4 text-gray-500" /> Sentiment Distribution
+          <div className="mt-8">
+            <div className="flex items-center gap-2 mb-4 text-sm font-semibold text-white">
+              <Activity className="h-4 w-4 text-[#fca311]" /> Sentiment Distribution
             </div>
             {sentimentDistribution.length === 0 ? (
               <p className="text-sm text-gray-500">Not enough signals yet.</p>
@@ -120,8 +120,8 @@ export default function PublicDiscoursePanel({ domain }) {
                 {sentimentDistribution.map(({ key, value }) => (
                   <div
                     key={key}
-                    className={`px-3 py-2 rounded-full text-xs font-semibold capitalize ${
-                      sentimentColors[key] || 'bg-slate-100 text-slate-600'
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      sentimentColors[key] || 'bg-white/10 text-gray-300 border border-white/20'
                     }`}
                   >
                     {key}: {value}
@@ -131,37 +131,37 @@ export default function PublicDiscoursePanel({ domain }) {
             )}
           </div>
 
-          <div className="mt-6">
-            <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-800">
-              <Radio className="h-4 w-4 text-gray-500" /> Leading Narratives
+          <div className="mt-8">
+            <div className="flex items-center gap-2 mb-4 text-sm font-semibold text-white">
+              <Radio className="h-4 w-4 text-[#fca311]" /> Leading Narratives
             </div>
             {discourse.discourse?.length ? (
               <div className="space-y-3">
                 {discourse.discourse.map((item, idx) => (
                   <div
                     key={`${item.platform}-${idx}`}
-                    className="border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition"
+                    className="bg-black/20 border border-white/10 rounded-xl p-5 hover:border-[#fca311]/50 hover:bg-white/5 transition-all"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm font-semibold text-gray-900 capitalize">{item.platform}</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-bold text-white capitalize">{item.platform}</p>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                          sentimentColors[item.sentiment] || 'bg-slate-100 text-slate-600'
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                          sentimentColors[item.sentiment] || 'bg-white/10 text-gray-300 border border-white/20'
                         }`}
                       >
                         {item.sentiment}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{item.content}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-500 mt-3">
-                      <span>Engagement: {item.engagement?.toLocaleString?.() || 0}</span>
+                    <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{item.content}</p>
+                    <div className="flex items-center justify-between text-xs font-medium text-gray-500 mt-4 pt-3 border-t border-white/10">
+                      <span>Engagement: <span className="text-gray-300">{item.engagement?.toLocaleString?.() || 0}</span></span>
                       <a
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary-600 font-medium hover:underline"
+                        className="text-[#fca311] hover:text-[#ffd166] transition-colors hover:underline flex items-center gap-1"
                       >
-                        View Source
+                        Source ↗
                       </a>
                     </div>
                   </div>

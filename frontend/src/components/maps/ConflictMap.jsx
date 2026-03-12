@@ -18,6 +18,19 @@ const riskColors = {
   low: '#22c55e'
 }
 
+const darkMapStyle = [
+  { elementType: 'geometry', stylers: [{ color: '#050510' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#050510' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#0a0a1a' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#0a0a1a' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#000000' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#515c6d' }] },
+  { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#000000' }] }
+];
+
 const getRegionBounds = (lat, lng, country) => {
   const regionSizes = {
     'Ukraine': 5,
@@ -72,8 +85,8 @@ export default function ConflictMap({ events = [], onEventClick }) {
 
   if (!isLoaded) {
     return (
-      <div className="w-full h-[600px] bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="text-gray-500">Loading map...</div>
+      <div className="w-full h-[600px] bg-black/40 rounded-xl border border-white/5 flex items-center justify-center">
+        <div className="text-gray-400 font-medium tracking-wide">Initializing Global Map...</div>
       </div>
     )
   }
@@ -85,12 +98,9 @@ export default function ConflictMap({ events = [], onEventClick }) {
       zoom={2}
       onLoad={setMap}
       options={{
-        styles: [
-          {
-            featureType: 'poi',
-            stylers: [{ visibility: 'off' }]
-          }
-        ]
+        styles: darkMapStyle,
+        disableDefaultUI: true,
+        zoomControl: true,
       }}
     >
       {events.map((event, index) => (
