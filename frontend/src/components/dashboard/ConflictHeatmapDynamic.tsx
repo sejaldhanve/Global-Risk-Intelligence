@@ -15,8 +15,8 @@ const markers = [
 
 export default function ConflictHeatmapDynamic() {
   return (
-    <div className="w-full h-full rounded-md overflow-hidden relative z-0 border border-[var(--panel-border)] shadow-inner">
-      <MapContainer center={[30, 0]} zoom={2} style={{ height: "100%", width: "100%", background: "#0a0a0a" }} zoomControl={false} scrollWheelZoom={false}>
+    <div className="w-full h-full rounded-md overflow-hidden relative z-0 border border-white/10 shadow-inner">
+      <MapContainer center={[30, 0]} zoom={2} style={{ height: "100%", width: "100%", background: "#050510" }} zoomControl={false} scrollWheelZoom={false}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; OpenStreetMap'
@@ -27,8 +27,8 @@ export default function ConflictHeatmapDynamic() {
             center={m.pos as [number, number]}
             radius={m.risk === "critical" ? 10 : m.risk === "high" ? 7 : 5}
             pathOptions={{
-              color: m.risk === "critical" ? "#ff2a2a" : m.risk === "high" ? "#ff5722" : "#b026ff",
-              fillColor: m.risk === "critical" ? "#ff2a2a" : m.risk === "high" ? "#ff5722" : "#b026ff",
+              color: m.risk === "critical" ? "#fca311" : m.risk === "high" ? "#ffd166" : "#ffffff",
+              fillColor: m.risk === "critical" ? "#fca311" : m.risk === "high" ? "#ffd166" : "#ffffff",
               fillOpacity: 0.6,
               className: "animate-pulse"
             }}

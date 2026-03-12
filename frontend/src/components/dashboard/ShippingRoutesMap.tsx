@@ -12,21 +12,21 @@ const chokepoints = [
 
 export function ShippingRoutesMap({ delay = 0 }: { delay?: number }) {
   return (
-    <GlassPanel delay={delay} className="flex flex-col">
-      <div className="flex justify-between items-center mb-4">
+    <GlassPanel delay={delay} className="flex flex-col bg-[#050510]/50 border-white/10 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <div className="flex justify-between items-center mb-4 px-1">
         <div className="flex items-center gap-2">
-          <Ship className="w-5 h-5 text-[#00f0ff]" />
-          <h3 className="text-lg font-semibold tracking-wide text-gray-800 dark:text-gray-100">Maritime Chokepoints</h3>
+          <Ship className="w-5 h-5 text-[#fca311]" />
+          <h3 className="text-lg font-semibold tracking-wide text-white">Maritime Chokepoints</h3>
         </div>
       </div>
       <div className="flex-1 flex flex-col justify-center space-y-4">
         {chokepoints.map((cp, idx) => (
-          <div key={idx} className="flex justify-between items-center p-3 rounded bg-black/5 dark:bg-white/5 border border-[var(--panel-border)]">
+          <div key={idx} className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
             <div>
-              <div className="text-sm font-medium dark:text-gray-200 text-gray-800">{cp.name}</div>
-              <div className="text-xs text-gray-500">Traffic: {cp.traffic}</div>
+              <div className="text-sm font-medium text-gray-200">{cp.name}</div>
+              <div className="text-xs text-gray-400">Traffic: {cp.traffic}</div>
             </div>
-            <div className={`text-xs px-2 py-1 rounded font-semibold ${cp.status === "Critical delay" ? "text-[#ff2a2a] bg-[#ff2a2a]/10" : cp.status === "Restricted" ? "text-[#ff5722] bg-[#ff5722]/10" : cp.status === "Congested" ? "text-yellow-500 bg-yellow-500/10" : "text-[#00f0ff] bg-[#00f0ff]/10"}`}>
+            <div className={`text-xs px-2 py-1 rounded font-semibold ${cp.status === "Critical delay" ? "text-red-400 bg-red-400/10 border border-red-400/20" : cp.status === "Restricted" ? "text-[#fca311] bg-[#fca311]/10 border border-[#fca311]/20" : cp.status === "Congested" ? "text-[#ffd166] bg-[#ffd166]/10 border border-[#ffd166]/20" : "text-green-400 bg-green-400/10 border border-green-400/20"}`}>
               {cp.status}
             </div>
           </div>

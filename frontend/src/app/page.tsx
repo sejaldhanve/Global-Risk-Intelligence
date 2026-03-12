@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FeatureGrid } from "@/components/landing/FeatureGrid";
 import { ScrollSection } from "@/components/landing/ScrollSection";
 import { AIAssistantSection } from "@/components/landing/AIAssistantSection";
+import { Footer } from "@/components/ui/Footer";
 
 export default function Home() {
   return (
@@ -31,7 +32,14 @@ export default function Home() {
       </video>
 
       {/* HEADER COMPONENT */}
-      <Header />
+      {/* <Header /> */}
+
+      {/* TAGLINE */}
+      <div className="absolute top-[60%] left-4 md:left-8 lg:left-12 -translate-y-1/2 z-20 max-w-2xl pointer-events-none">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white/80 tracking-tighter leading-[0.9] mix-blend-overlay drop-shadow-xl uppercase">
+          See Global Risk<br />Before It<br />Happens.
+        </h1>
+      </div>
 
       {/* CALL TO ACTION BUTTON */}
       <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20">
@@ -69,6 +77,9 @@ export default function Home() {
 
       {/* FEATURE GRID SECTION */}
       {/* <FeatureGrid /> */}
+
+      {/* PREMIUM DARK FOOTER */}
+      <Footer />
     </main>
   );
 }

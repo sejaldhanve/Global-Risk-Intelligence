@@ -14,10 +14,10 @@ const data = [
 
 export function EnergyIndicatorsChart({ delay = 0 }: { delay?: number }) {
   return (
-    <GlassPanel delay={delay}>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold tracking-wide text-gray-800 dark:text-gray-100">Global Energy Prices</h3>
-        <span className="text-xs text-[#00f0ff]">Live Feed</span>
+    <GlassPanel delay={delay} className="bg-[#050510]/50 border-white/10 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <div className="flex justify-between items-center mb-4 px-1">
+        <h3 className="text-lg font-semibold tracking-wide text-white">Global Energy Prices</h3>
+        <span className="text-xs text-[#fca311] animate-pulse">Live Feed</span>
       </div>
       <div className="flex-1 w-full min-h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -25,10 +25,10 @@ export function EnergyIndicatorsChart({ delay = 0 }: { delay?: number }) {
             <XAxis dataKey="time" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
             <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: "var(--panel-bg)", borderColor: "var(--panel-border)", color: "var(--foreground)", borderRadius: "8px" }}
+              contentStyle={{ backgroundColor: "#050510", borderColor: "rgba(255,255,255,0.1)", color: "#ffffff", borderRadius: "8px" }}
             />
-            <Line type="monotone" dataKey="oil" stroke="#00f0ff" strokeWidth={2} dot={{ r: 4, fill: "#00f0ff" }} activeDot={{ r: 6 }} name="Crude Oil (Brent)" />
-            <Line type="monotone" dataKey="gas" stroke="#b026ff" strokeWidth={2} dot={{ r: 4, fill: "#b026ff" }} activeDot={{ r: 6 }} name="Natural Gas" />
+            <Line type="monotone" dataKey="oil" stroke="#fca311" strokeWidth={2} dot={{ r: 4, fill: "#fca311" }} activeDot={{ r: 6 }} name="Crude Oil (Brent)" />
+            <Line type="monotone" dataKey="gas" stroke="#ffd166" strokeWidth={2} dot={{ r: 4, fill: "#ffd166" }} activeDot={{ r: 6 }} name="Natural Gas" />
           </LineChart>
         </ResponsiveContainer>
       </div>
