@@ -30,15 +30,19 @@ def fetch_lastupdate_text() -> str:
 
 def parse_lastupdate(text: str, limit: int = 2) -> List[str]:
     """
-    lastupdate.txt contains lines like:
-    20240308120000 20240308120000.export.CSV.zip
-    Return absolute URLs for the newest N files.
+    lastupdate.txt lines look like:
+    <filesize> <md5> http://data.gdeltproject.org/gdeltv2/20260312090000.export.CSV.zip
+    We want the newest N .export.CSV.zip URLs.
     """
     urls = []
     for line in text.strip().splitlines():
         parts = line.split()
-        if len(parts) >= 2 and parts[1].endswith(".export.CSV.zip"):
-            urls.append(f"{GDELT_BASE_URL}/{parts[1]}")
+        # URL is usually the last token
+        for token in reversed(parts):
+            if token.endswith(".export.CSV.zip"):
+                # token is already absolute URL
+                urls.append(token if token.startswith("http") else f"{GDELT_BASE_URL}/{token}")
+                break
     return urls[:limit]
 
 
@@ -124,7 +128,7 @@ def persist_events(events: List[EventNormalized], basename: str = "gdelt_events"
             f.write(ev.model_dump_json() + "\n")
 
     # Parquet for analytics
-    pd.DataFrame([ev.model_dump() for ev in events]).to_parquet(parquet_path, index=False)
+    pd.DataFrame([ev.model_dump(mode="json") for ev in events]).to_parquet(parquet_path, index=False)
     return jsonl_path
 
 

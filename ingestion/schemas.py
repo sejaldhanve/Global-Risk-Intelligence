@@ -28,7 +28,7 @@ class EventNormalized(BaseModel):
 
 class GdeltRawRow(BaseModel):
     GLOBALEVENTID: int
-    SQLDATE: int
+    SQLDATE: str
     Actor1Name: Optional[str] = None
     Actor2Name: Optional[str] = None
     Actor1CountryCode: Optional[str] = None
