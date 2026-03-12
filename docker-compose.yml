@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: global-intel-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: global-intel
+
+  redis:
+    image: redis:7-alpine
+    container_name: global-intel-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build: ./backend
+    container_name: global-intel-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/global-intel
+      - REDIS_URL=redis://redis:6379
+      - PYTHON_ML_SERVICE_URL=http://python-ml:8000
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  python-ml:
+    build: ./python-ml
+    container_name: global-intel-ml
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python-ml:/app
+
+  frontend:
+    build: ./frontend
+    container_name: global-intel-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  mongodb_data:
+  redis_data:

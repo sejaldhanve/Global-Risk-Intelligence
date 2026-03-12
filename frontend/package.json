@@ -1,37 +1,30 @@
 {
-  "name": "gri-risk-intelligence-temp",
-  "version": "0.1.0",
-  "private": true,
+  "name": "global-intel-frontend",
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.43",
-    "@ai-sdk/react": "^3.0.118",
-    "@types/leaflet": "^1.9.21",
-    "ai": "^6.0.116",
-    "framer-motion": "^12.35.2",
-    "leaflet": "^1.9.4",
-    "lucide-react": "^0.577.0",
-    "next": "16.1.6",
-    "next-themes": "^0.4.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-leaflet": "^5.0.0",
-    "react-markdown": "^10.1.0",
-    "recharts": "^3.8.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0",
+    "@react-google-maps/api": "^2.19.2",
+    "axios": "^1.5.0",
+    "recharts": "^2.8.0",
+    "lucide-react": "^0.292.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "@vitejs/plugin-react": "^4.1.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "vite": "^4.5.0"
   }
 }
