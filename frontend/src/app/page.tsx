@@ -1,6 +1,8 @@
 import Header from "@/components/ui/header";
 import Link from "next/link";
 import { FeatureGrid } from "@/components/landing/FeatureGrid";
+import { ScrollSection } from "@/components/landing/ScrollSection";
+import { AIAssistantSection } from "@/components/landing/AIAssistantSection";
 
 export default function Home() {
   return (
@@ -59,8 +61,14 @@ export default function Home() {
       </div>
       </section>
 
+      {/* SCROLL SECTION WITH TEXT AND VIDEO */}
+      <ScrollSection />
+
+      {/* AI ASSISTANT SECTION */}
+      <AIAssistantSection />
+
       {/* FEATURE GRID SECTION */}
-      <FeatureGrid />
+      {/* <FeatureGrid /> */}
     </main>
   );
 }
