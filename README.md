@@ -29,7 +29,7 @@ A production-ready, hackathon-level geopolitical intelligence platform that aggr
 ## 📁 Project Structure
 
 ```
-global-intel-platform/
+Global-Risk-Intelligence/
 ├── backend/
 │   ├── src/
 │   │   ├── server.js              # Express server
@@ -74,7 +74,7 @@ global-intel-platform/
 
 ### 1. Clone and Navigate
 ```bash
-cd global-intel-platform
+cd Global-Risk-Intelligence
 ```
 
 ### 2. Backend Setup
@@ -108,7 +108,7 @@ cp .env.example .env
 #### Backend (.env)
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/global-intel
+MONGODB_URI=your_mongodb_uri
 REDIS_URL=redis://localhost:6379
 
 OPENAI_API_KEY=your_openai_api_key
