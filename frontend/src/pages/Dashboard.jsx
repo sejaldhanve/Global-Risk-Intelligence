@@ -7,6 +7,8 @@ import RiskChart from '../components/dashboard/RiskChart'
 import StatsCard from '../components/dashboard/StatsCard'
 import CreateEventModal from '../components/dashboard/CreateEventModal'
 import DomainFilter from '../components/dashboard/DomainFilter'
+import NarrativeRealityPanel from '../components/dashboard/NarrativeRealityPanel'
+import PublicDiscoursePanel from '../components/dashboard/PublicDiscoursePanel'
 import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
@@ -22,10 +24,14 @@ export default function Dashboard() {
   }, [filter, domainFilter])
 
   const fetchEvents = async () => {
+    setLoading(true)
     try {
       const params = {}
       if (filter !== 'all') params.riskLevel = filter
-      if (domainFilter !== 'all') params.domain = domainFilter
+      if (domainFilter !== 'all') {
+        params.domain = domainFilter
+        params.autoPopulate = true
+      }
       const response = await axios.get('/api/event', { params })
       setEvents(response.data.events)
     } catch (error) {
@@ -142,6 +148,8 @@ export default function Dashboard() {
             onDomainChange={setDomainFilter}
           />
           <RiskChart events={events} />
+          <NarrativeRealityPanel events={events} />
+          <PublicDiscoursePanel domain={domainFilter} />
         </div>
       </div>
 

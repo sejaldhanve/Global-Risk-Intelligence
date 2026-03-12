@@ -1,6 +1,6 @@
 "use client";
 
-import { GlassPanel } from "@/components/ui/GlassPanel";
+import { GlassPanel } from "../ui/GlassPanel";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const data = [

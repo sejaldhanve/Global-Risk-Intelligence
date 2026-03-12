@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Globe, LayoutDashboard, Bot } from 'lucide-react'
+import { Globe, LayoutDashboard, Bot, Compass } from 'lucide-react'
 
 export default function Layout({ children }) {
   const location = useLocation()
 
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/assistant', label: 'AI Assistant', icon: Bot }
+    { path: '/', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { path: '/features', label: 'Features', icon: Compass },
+    { path: '/assistant', label: 'AI Assistant', icon: Bot, exact: true }
   ]
 
   return (
@@ -22,20 +23,21 @@ export default function Layout({ children }) {
             </div>
             
             <div className="flex space-x-4">
-              {navItems.map(({ path, label, icon: Icon }) => (
-                <Link
-                  key={path}
-                  to={path}
-                  className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                    location.pathname === path
-                      ? 'bg-primary-100 text-primary-700'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  <Icon className="h-5 w-5 mr-2" />
-                  {label}
-                </Link>
-              ))}
+              {navItems.map(({ path, label, icon: Icon, exact }) => {
+                const isActive = exact ? location.pathname === path : location.pathname.startsWith(path)
+                return (
+                  <Link
+                    key={path}
+                    to={path}
+                    className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 mr-2" />
+                    {label}
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </div>

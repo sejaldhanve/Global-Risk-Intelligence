@@ -10,9 +10,9 @@ const DOMAINS = [
   { value: 'public_discourse', label: 'Public Discourse', icon: '💬' }
 ]
 
-export default function DomainFilter({ selectedDomain, onDomainChange }) {
+export default function DomainFilter({ selectedDomain, onDomainChange, embedded = false, className = '' }) {
   return (
-    <div className="card">
+    <div className={`${embedded ? '' : 'card'} ${className}`}>
       <div className="flex items-center gap-2 mb-4">
         <Filter className="h-5 w-5 text-gray-600" />
         <h3 className="font-semibold text-gray-900">Filter by Domain</h3>
