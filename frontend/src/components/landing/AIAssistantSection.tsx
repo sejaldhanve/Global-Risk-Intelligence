@@ -78,7 +78,7 @@ export function AIAssistantSection() {
           {/* Main Image Container */}
           <div className="relative w-[85%] h-[85%] animate-[pulse_6s_ease-in-out_infinite] flex items-center justify-center rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(252,163,17,0.4)] border border-[#ffd166]/20">
             <img 
-              src="/ai_assistant.jpeg" 
+              src="/images/ai_assistant.jpeg" 
               alt="AI Geopolitical Assistant" 
               className="w-full h-full object-cover"
               onError={(e) => {

@@ -6,7 +6,6 @@ import { NarrativeTrendsChart } from "@/components/dashboard/NarrativeTrendsChar
 import { EnergyIndicatorsChart } from "@/components/dashboard/EnergyIndicatorsChart";
 import { ShippingRoutesMap } from "@/components/dashboard/ShippingRoutesMap";
 import { GlobalFeed } from "@/components/dashboard/GlobalFeed";
-import { AiAssistantChat } from "@/components/dashboard/AiAssistantChat";
 
 export default function DashboardPage() {
   return (

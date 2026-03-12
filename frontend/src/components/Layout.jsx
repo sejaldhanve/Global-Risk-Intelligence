@@ -10,6 +10,11 @@ export default function Layout({ children }) {
     { path: '/assistant', label: 'AI Assistant', icon: Bot, exact: true }
   ]
 
+  // If on the landing page, render without the white layout and padded container
+  if (location.pathname === '/') {
+    return <div className="min-h-screen bg-black">{children}</div>
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b border-gray-200">

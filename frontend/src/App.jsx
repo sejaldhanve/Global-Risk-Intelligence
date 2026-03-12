@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
 import EventDetail from './pages/EventDetail'
 import AIAssistant from './pages/AIAssistant'
@@ -17,7 +18,8 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/event/:id" element={<EventDetail />} />
           <Route path="/assistant" element={<AIAssistant />} />
 
