@@ -8,6 +8,7 @@ const narrativeAnalyzer = require('../services/ai/narrativeAnalyzer');
 const forecastService = require('../services/forecast/forecastService');
 const mapService = require('../services/map/mapService');
 const { classifySourceDomain, classifyEventDomains } = require('../services/domain/domainClassifier');
+const { runAlertSweepForEvent } = require('../services/watchlist/watchlistService');
 
 const DOMAIN_SEED_QUERIES = {
   verified_news: 'Major geopolitical conflict escalation and verified international responses',
@@ -145,6 +146,12 @@ exports.createEvent = async (req, res) => {
     }
 
     const { event, forecast } = await createAndStoreEventFromQuery(query, { forceDomain: domain });
+
+    try {
+      await runAlertSweepForEvent(event);
+    } catch (alertError) {
+      console.warn('Alert generation failed for new event:', alertError.message);
+    }
 
     res.status(201).json({
       success: true,

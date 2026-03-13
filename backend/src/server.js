@@ -15,6 +15,9 @@ const mapRoutes = require('./routes/map');
 const forecastRoutes = require('./routes/forecast');
 const agentRoutes = require('./routes/agent');
 const discourseRoutes = require('./routes/discourse');
+const watchlistRoutes = require('./routes/watchlist');
+const alertsRoutes = require('./routes/alerts');
+const { runAlertSweep } = require('./services/watchlist/watchlistService');
 
 const app = express();
 
@@ -34,7 +37,9 @@ app.get('/', (req, res) => {
       events: '/api/event',
       map: '/api/map',
       forecast: '/api/forecast',
-      agent: '/api/agent'
+      agent: '/api/agent',
+      watchlist: '/api/watchlist',
+      alerts: '/api/alerts'
     }
   });
 });
@@ -50,6 +55,8 @@ app.use('/api/map', mapRoutes);
 app.use('/api/forecast', forecastRoutes);
 app.use('/api/agent', agentRoutes);
 app.use('/api/discourse', discourseRoutes);
+app.use('/api/watchlist', watchlistRoutes);
+app.use('/api/alerts', alertsRoutes);
 
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -82,8 +89,18 @@ const startServer = async () => {
       console.log(`   GET  /api/event - Get events`);
       console.log(`   POST /api/map/geocode - Geocode location`);
       console.log(`   POST /api/forecast - Generate forecast`);
-      console.log(`   POST /api/agent/query - Ask AI agent\n`);
+      console.log(`   POST /api/agent/query - Ask AI agent`);
+      console.log(`   GET  /api/watchlist - Get watchlists`);
+      console.log(`   GET  /api/alerts - Get alerts\n`);
     });
+
+    setInterval(async () => {
+      try {
+        await runAlertSweep();
+      } catch (error) {
+        console.warn('Background alert sweep failed:', error.message);
+      }
+    }, 60 * 1000);
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
