@@ -8,6 +8,42 @@ export default function AIAssistant() {
   const [loading, setLoading] = useState(false)
   const messagesEndRef = useRef(null)
 
+  const normalizeAssistantContent = (content) => {
+    if (!content) {
+      return {
+        answer: 'No response received from assistant.',
+        keyFindings: [],
+        data: {},
+        recommendations: []
+      }
+    }
+
+    if (typeof content === 'string') {
+      return {
+        answer: content,
+        keyFindings: [],
+        data: {},
+        recommendations: []
+      }
+    }
+
+    if (typeof content === 'object') {
+      return {
+        answer: content.answer || content.text || content.message || 'No response received from assistant.',
+        keyFindings: Array.isArray(content.keyFindings) ? content.keyFindings : [],
+        data: content.data && typeof content.data === 'object' ? content.data : {},
+        recommendations: Array.isArray(content.recommendations) ? content.recommendations : []
+      }
+    }
+
+    return {
+      answer: 'No response received from assistant.',
+      keyFindings: [],
+      data: {},
+      recommendations: []
+    }
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -38,7 +74,7 @@ export default function AIAssistant() {
       
       const assistantMessage = {
         role: 'assistant',
-        content: response.data.response,
+        content: response.data?.response || { answer: 'No response received from assistant.' },
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
       
@@ -97,11 +133,11 @@ export default function AIAssistant() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="card h-[calc(100vh-320px)] min-h-[500px] flex flex-col p-0 overflow-hidden border border-white/10 shadow-2xl relative">
+      <div className="card h-[calc(100dvh-240px)] max-h-[760px] min-h-[460px] flex flex-col p-0 overflow-hidden border border-white/10 shadow-2xl relative">
         {/* Ambient background glow inside chat */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#fca311] opacity-[0.02] rounded-full blur-3xl pointer-events-none"></div>
         
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 relative z-10">
+        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar [scrollbar-gutter:stable] p-6 space-y-6 relative z-10">
           
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center space-y-8 animate-slide-up">
@@ -174,59 +210,69 @@ export default function AIAssistant() {
                         }`}
                       >
                         {message.role === 'assistant' ? (
-                          <div className="space-y-4 text-sm md:text-base font-light leading-relaxed">
-                            <p className="text-gray-100">{message.content.answer}</p>
-                            
-                            {message.content.keyFindings && message.content.keyFindings.length > 0 && (
-                              <div className="bg-black/20 rounded-lg p-3 border border-white/5">
-                                <h4 className="font-semibold text-xs uppercase tracking-wider mb-2 text-[#ffd166] flex items-center gap-2">
-                                  <Sparkles className="h-3 w-3" /> Key Analysis
-                                </h4>
-                                <ul className="space-y-2">
-                                  {message.content.keyFindings.map((finding, i) => (
-                                    <li key={i} className="flex gap-2 text-sm text-gray-300">
-                                      <span className="text-[#fca311] mt-0.5">&bull;</span>
-                                      <span>{finding}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
+                          (() => {
+                            const assistantContent = normalizeAssistantContent(message.content)
+                            const riskValue = typeof assistantContent.data?.risk === 'string' ? assistantContent.data.risk : 'unknown'
+                            const normalizedRisk = riskValue.toLowerCase()
+                            const confidenceValue = typeof assistantContent.data?.confidence === 'number'
+                              ? assistantContent.data.confidence
+                              : null
 
-                            {message.content.data && (
-                              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10 mt-4">
-                                <div>
-                                  <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Risk Assessed</span>
-                                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase
-                                    ${message.content.data.risk.toLowerCase() === 'critical' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 
-                                      message.content.data.risk.toLowerCase() === 'high' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 
-                                      'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'}`}>
-                                    {message.content.data.risk}
-                                  </span>
-                                </div>
-                                <div>
-                                  <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">AI Confidence</span>
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-bold">
-                                    {message.content.data.confidence}%
-                                  </span>
-                                </div>
-                              </div>
-                            )}
+                            return (
+                              <div className="space-y-4 text-sm md:text-base font-light leading-relaxed">
+                                <p className="text-gray-100">{assistantContent.answer}</p>
+                                
+                                {assistantContent.keyFindings.length > 0 && (
+                                  <div className="bg-black/20 rounded-lg p-3 border border-white/5">
+                                    <h4 className="font-semibold text-xs uppercase tracking-wider mb-2 text-[#ffd166] flex items-center gap-2">
+                                      <Sparkles className="h-3 w-3" /> Key Analysis
+                                    </h4>
+                                    <ul className="space-y-2">
+                                      {assistantContent.keyFindings.map((finding, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-gray-300">
+                                          <span className="text-[#fca311] mt-0.5">&bull;</span>
+                                          <span>{finding}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
 
-                            {message.content.recommendations && message.content.recommendations.length > 0 && (
-                              <div className="pt-3 border-t border-white/10 mt-4">
-                                <h4 className="font-semibold text-xs uppercase tracking-wider mb-2 text-[#22c55e]">Actionable Intelligence:</h4>
-                                <ul className="space-y-1 text-sm text-gray-300">
-                                  {message.content.recommendations.map((rec, i) => (
-                                    <li key={i} className="flex gap-2">
-                                      <span className="text-[#22c55e] mt-0.5 opacity-50">→</span>
-                                      <span>{rec}</span>
-                                    </li>
-                                  ))}
-                                </ul>
+                                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10 mt-4">
+                                  <div>
+                                    <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Risk Assessed</span>
+                                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase
+                                      ${normalizedRisk === 'critical' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 
+                                        normalizedRisk === 'high' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 
+                                        normalizedRisk === 'medium' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                        'bg-white/10 text-gray-300 border border-white/20'}`}>
+                                      {riskValue}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">AI Confidence</span>
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-bold">
+                                      {confidenceValue !== null ? `${confidenceValue}%` : 'N/A'}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {assistantContent.recommendations.length > 0 && (
+                                  <div className="pt-3 border-t border-white/10 mt-4">
+                                    <h4 className="font-semibold text-xs uppercase tracking-wider mb-2 text-[#22c55e]">Actionable Intelligence:</h4>
+                                    <ul className="space-y-1 text-sm text-gray-300">
+                                      {assistantContent.recommendations.map((rec, i) => (
+                                        <li key={i} className="flex gap-2">
+                                          <span className="text-[#22c55e] mt-0.5 opacity-50">→</span>
+                                          <span>{rec}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
+                            )
+                          })()
                         ) : message.role === 'error' ? (
                           <div className="flex items-start gap-2">
                             <p className="text-sm">{message.content}</p>

@@ -12,6 +12,7 @@ class AgentService {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY
     });
+    this.openaiModel = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
     this.tools = [
       {
@@ -63,6 +64,57 @@ class AgentService {
     ];
   }
 
+  sanitizeForPrompt(value, depth = 0) {
+    if (value === null || value === undefined) return value;
+
+    if (typeof value === 'string') {
+      return value.length > 350 ? `${value.slice(0, 350)}...` : value;
+    }
+
+    if (typeof value === 'number' || typeof value === 'boolean') {
+      return value;
+    }
+
+    if (Array.isArray(value)) {
+      const limited = value.slice(0, 5);
+      return limited.map((item) => this.sanitizeForPrompt(item, depth + 1));
+    }
+
+    if (typeof value === 'object') {
+      if (depth > 3) {
+        return '[truncated-object]';
+      }
+
+      const entries = Object.entries(value).slice(0, 12);
+      const compact = {};
+      for (const [key, val] of entries) {
+        compact[key] = this.sanitizeForPrompt(val, depth + 1);
+      }
+      return compact;
+    }
+
+    return String(value);
+  }
+
+  buildCompactResultsText(executionResult) {
+    const sections = executionResult.steps.map((step) => {
+      const raw = step.success ? step.result : { error: step.error };
+      const compact = this.sanitizeForPrompt(raw);
+      const compactJson = JSON.stringify(compact, null, 2);
+      const boundedJson = compactJson.length > 1800 ? `${compactJson.slice(0, 1800)}...` : compactJson;
+
+      return [
+        `Tool: ${step.tool}`,
+        `Status: ${step.success ? 'Success' : 'Failed'}`,
+        `Reasoning: ${step.reasoning || 'N/A'}`,
+        `Output: ${boundedJson}`
+      ].join('\n');
+    });
+
+    const joined = sections.join('\n\n---\n\n');
+    return joined.length > 12000 ? `${joined.slice(0, 12000)}\n...[truncated for token safety]` : joined;
+  }
+
   async processQuery(userQuery) {
     try {
       const plan = await this.createPlan(userQuery);
@@ -98,7 +150,7 @@ Return a JSON plan with steps, each containing:
 }`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: this.openaiModel,
       messages: [
         {
           role: 'system',
@@ -155,7 +207,7 @@ Return a JSON plan with steps, each containing:
       case 'search_news':
         return await searchAggregator.aggregateSearch(
           parameters.query,
-          { count: parameters.count || 10 }
+          { count: Math.min(parameters.count || 6, 8) }
         );
 
       case 'rank_sources':
@@ -192,9 +244,7 @@ Return a JSON plan with steps, each containing:
   }
 
   async formatResponse(executionResult, userQuery) {
-    const resultsText = executionResult.steps.map(step => 
-      `${step.tool}: ${step.success ? 'Success' : 'Failed'}\n${JSON.stringify(step.result || step.error, null, 2)}`
-    ).join('\n\n---\n\n');
+    const resultsText = this.buildCompactResultsText(executionResult);
 
     const prompt = `Based on the execution results, provide a comprehensive answer to the user's query.
 
@@ -224,7 +274,7 @@ Format as JSON with:
 }`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: this.openaiModel,
       messages: [
         {
           role: 'system',

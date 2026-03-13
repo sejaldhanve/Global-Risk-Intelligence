@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#050510] text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-[#050510] text-gray-100 relative overflow-x-hidden">
       {/* Global Dynamic Background elements for a premium feel */}
       <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-[#fca311] opacity-[0.04] rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute top-[40%] right-[-150px] w-[600px] h-[600px] bg-red-600 opacity-[0.02] rounded-full blur-[120px] pointer-events-none" />
