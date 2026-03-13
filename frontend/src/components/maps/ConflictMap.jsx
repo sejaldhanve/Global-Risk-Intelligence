@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { GoogleMap, useJsApiLoader, Marker, Polygon } from '@react-google-maps/api'
 
 const mapContainerStyle = {
@@ -19,17 +19,18 @@ const riskColors = {
 }
 
 const darkMapStyle = [
-  { elementType: 'geometry', stylers: [{ color: '#050510' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#050510' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
-  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }] },
+  { elementType: 'geometry', stylers: [{ color: '#0b1023' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#0b1023' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#cbd8ff' }] },
+  { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#a5b4ff' }] },
+  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#1e2670' }] },
   { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#0a0a1a' }] },
-  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#0a0a1a' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#000000' }] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#515c6d' }] },
-  { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#000000' }] }
-];
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#141c35' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#222b4f' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#050c2b' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#7c8bff' }] }
+]
 
 const getRegionBounds = (lat, lng, country) => {
   const regionSizes = {
@@ -71,6 +72,36 @@ export default function ConflictMap({ events = [], onEventClick }) {
 
   const [map, setMap] = useState(null)
 
+  const mapOptions = useMemo(() => {
+    const baseOptions = {
+      styles: darkMapStyle,
+      zoomControl: true,
+      streetViewControl: false,
+      fullscreenControl: true,
+      mapTypeControl: true,
+      mapTypeId: 'roadmap',
+      backgroundColor: '#0b1023'
+    }
+
+    if (typeof window !== 'undefined' && window.google) {
+      return {
+        ...baseOptions,
+        mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: window.google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_BOTTOM
+        },
+        fullscreenControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_TOP
+        }
+      }
+    }
+
+    return baseOptions
+  }, [isLoaded])
+
   useEffect(() => {
     if (map && events.length > 0) {
       const bounds = new window.google.maps.LatLngBounds()
@@ -97,11 +128,7 @@ export default function ConflictMap({ events = [], onEventClick }) {
       center={center}
       zoom={2}
       onLoad={setMap}
-      options={{
-        styles: darkMapStyle,
-        disableDefaultUI: true,
-        zoomControl: true,
-      }}
+      options={mapOptions}
     >
       {events.map((event, index) => (
         <div key={event._id || index}>
@@ -110,21 +137,21 @@ export default function ConflictMap({ events = [], onEventClick }) {
             onClick={() => onEventClick && onEventClick(event)}
             icon={{
               path: window.google.maps.SymbolPath.CIRCLE,
-              scale: 8,
+              scale: 9,
               fillColor: riskColors[event.summary?.riskLevel] || riskColors.medium,
-              fillOpacity: 1,
-              strokeColor: '#ffffff',
-              strokeWeight: 2
+              fillOpacity: 0.95,
+              strokeColor: '#0b1023',
+              strokeWeight: 3
             }}
           />
-          
+
           <Polygon
             paths={getRegionBounds(event.lat, event.lng, event.country)}
             options={{
               fillColor: riskColors[event.summary?.riskLevel] || riskColors.medium,
-              fillOpacity: 0.2,
+              fillOpacity: 0.14,
               strokeColor: riskColors[event.summary?.riskLevel] || riskColors.medium,
-              strokeOpacity: 0.6,
+              strokeOpacity: 0.8,
               strokeWeight: 2
             }}
             onClick={() => onEventClick && onEventClick(event)}
